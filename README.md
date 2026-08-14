@@ -2,7 +2,7 @@
 
 ## Giới thiệu
 
-**Mạch điều khiển động cơ DC MKE-M17 L9110 I2C Motor Driver Module** là module điều khiển **2 động cơ DC công suất thấp 0.8A/kênh** như **TT Motor, N20 Motor** thông qua giao tiếp **I2C**. Module tích hợp **vi điều khiển 32-bit ARM Cortex-M0+** đảm nhiệm việc tạo PWM, điều khiển chiều quay, quản lý thời gian và giám sát điện áp nguồn motor, giúp vi điều khiển chính như **Arduino, ESP32, ESP8266, Raspberry Pi hoặc STM32** dễ dàng điều khiển động cơ chỉ thông qua hai tín hiệu **SDA và SCL**. 
+**Mạch điều khiển động cơ DC MKE-M17 L9110 I2C Motor Driver Module** là module điều khiển **2 động cơ DC công suất thấp 6-9VDC/0.8A/kênh** như **TT Motor, N20 Motor** thông qua giao tiếp **I2C**. Module tích hợp **vi điều khiển 32-bit ARM Cortex-M0+** đảm nhiệm việc tạo PWM, điều khiển chiều quay, quản lý thời gian và giám sát điện áp nguồn motor, giúp vi điều khiển chính như **Arduino, ESP32, ESP8266, Raspberry Pi hoặc STM32** dễ dàng điều khiển động cơ chỉ thông qua hai tín hiệu **SDA và SCL**. 
 
 Module sử dụng **2 x IC L9110** làm mạch cầu H, hỗ trợ điều khiển độc lập hai động cơ với các chức năng:
 
@@ -15,7 +15,7 @@ Module sử dụng **2 x IC L9110** làm mạch cầu H, hỗ trợ điều khi�
 * Cấu hình tần số PWM.
 * Kết nối nhiều module trên cùng bus I2C.
 
-**Mạch điều khiển động cơ DC MKE-M17 L9110 I2C Motor Driver Module** phù hợp cho các ứng dụng như **robot 2WD/4WD, xe điều khiển từ xa, robot dò line, robot tránh vật cản, xe thông minh, robot tự hành và các mô hình STEM**. Module hỗ trợ **logic 3.3–5VDC**, điện áp motor **6–9VDC**, phù hợp với nhiều nền tảng điều khiển phổ biến. 
+**Mạch điều khiển động cơ DC MKE-M17 L9110 I2C Motor Driver Module** đặc biệt phù hợp cho các ứng dụng như **robot 2WD/4WD, xe điều khiển từ xa, robot dò line, robot tránh vật cản, xe thông minh, robot tự hành và các mô hình STEM**. Module hỗ trợ điện áp giao tiếp **3.3VDC và 5VDC**, cho phép kết nối với Arduino, Raspberry Pi, NVIDIA Jetson, Micro:bit và nhiều nền tảng điều khiển khác. Module sử dụng chuẩn kết nối **XH2.54 4P** và đi kèm cáp **4P XH2.54 – Dupont**.
 
 > **Lưu ý:** MKE-M17 có dòng liên tục **0.8A/kênh** và dòng đỉnh **1.5A/kênh**, phù hợp nhất với các động cơ DC công suất thấp.
 
