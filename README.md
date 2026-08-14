@@ -86,12 +86,10 @@ Cổng này được thiết kế để kết nối với **[MKE-M15-BLUETOOTH-U
 | `MB2` | Motor B   |
 
 ## Jumper J1
-J1 dùng để lựa chọn nguồn Module MKE-M17.
-
-### J1 = OFF — Mặc định
+Jumper J1 dùng để lựa chọn nguồn Module MKE-M17.
+**J1 = OFF — Mặc định**
 Nguồn cấp cho Module MKE-M17 hoạt động độc lập với nguồn cấp cho động cơ, khi đó chân 5V trên cổng I2C/BLE sẽ là chân nguồn Input 5VDC.
-
-### J1 = ON
+**#J1 = ON**
 Nguồn cấp cho Module MKE-M17 hoạt động sử dụng nguồn cấp cho động cơ, khi đó chân 5V trên cổng I2C/BLE sẽ là chân nguồn Output 5VDC / Max 700mA.
 
 ## Nút nhấn chức năng SW1
