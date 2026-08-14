@@ -66,10 +66,18 @@ Chân `SDA` và `SCL` được tích hợp điện trở kéo lên **10kΩ**.
 | `5V` | Nguồn dương 5VDC   |
 | `RX`  | UART RX   |
 | `TX`  | UART TX   |
+
 Cổng này được thiết kế để kết nối với **[MKE-M15-BLUETOOTH-UART-MODULE ](https://github.com/makereduvn/MKE-M15-BLUETOOTH-UART-MODULE)** điều khiển qua [APP Dabble](https://thestempedia.com/product/dabble/).
 
-### Ngõ ra động cơ
+### Ngõ vào nguồn động cơ
+| Chân  | Chức năng                 |
+| ----- | ------------------------- |
+| `6-9V` | Nguồn dương motor, 6–9VDC|
+| `GND` | Nguồn âm 0VDC             |
 
+Đầu vào nguồn được bảo vệ chống đấu ngược cực bằng diode **SS34**.
+
+### Ngõ ra nguồn động cơ
 | Chân  | Chức năng |
 | ----- | --------- |
 | `MA1` | Motor A   |
@@ -77,57 +85,30 @@ Cổng này được thiết kế để kết nối với **[MKE-M15-BLUETOOTH-U
 | `MB1` | Motor B   |
 | `MB2` | Motor B   |
 
-### Cổng cấp nguồn motor
-
-| Chân  | Chức năng                 |
-| ----- | ------------------------- |
-| `6-9V` | Nguồn dương motor, 6–9VDC |
-| `GND` | Mass nguồn motor          |
-
-Đầu vào nguồn được bảo vệ chống đấu ngược cực bằng diode **SS34**.
-
-## Jumper / công tắc nguồn J1
-
-J1 dùng để lựa chọn nguồn cấp cho MCU và phần logic của module.
-
-### J1 = ON
-
-Bật bộ ổn áp **5V LDO tích hợp**, cho phép cấp nguồn cho MCU và logic trực tiếp từ `Vin`.
-
-> **Cảnh báo:** Chỉ sử dụng J1 = ON khi module hoạt động độc lập và **không kết nối VCC từ I2C Master**.
+## Jumper J1
+J1 dùng để lựa chọn nguồn Module MKE-M17.
 
 ### J1 = OFF — Mặc định
+Nguồn cấp cho Module MKE-M17 hoạt động độc lập với nguồn cấp cho động cơ, khi đó chân 5V trên cổng I2C/BLE sẽ là chân nguồn Input 5VDC.
 
-Tắt bộ ổn áp 5V tích hợp. MCU và phần logic được cấp nguồn từ:
+### J1 = ON
+Nguồn cấp cho Module MKE-M17 hoạt động sử dụng nguồn cấp cho động cơ, khi đó chân 5V trên cổng I2C/BLE sẽ là chân nguồn Output 5VDC / Max 700mA.
 
-* Chân `VCC` của cổng I2C Master.
-* Hoặc cổng UART trong trường hợp phù hợp.
-
-Khi kết nối MKE-M17 với Arduino/ESP32 thông qua I2C, nên giữ **J1 = OFF**.
-
-## Nút nhấn chức năng S1 / SW1
-
+## Nút nhấn chức năng SW1
 MKE-M17 tích hợp một nút nhấn đa chức năng.
 
 ### Kiểm tra motor
-
 Nhấn nút **1 lần** để chạy chương trình tự kiểm tra:
-
 1. Motor A quay thuận.
 2. Motor A quay ngược.
 3. Motor B quay thuận.
 4. Motor B quay ngược.
 
 ### Khôi phục cài đặt gốc
-
 Nhấn và giữ nút khoảng **4 giây**.
-
 Module sẽ:
-
 * Xóa cấu hình trong EEPROM.
 * Khôi phục địa chỉ I2C về mặc định `0x40`.
-
-> **Lưu ý:** Phần cứng hiện tại không có LED riêng để báo quá trình Factory Reset. Địa chỉ được tự động khôi phục sau khoảng 4 giây.
 
 ## Sơ đồ kết nối với Arduino Uno
 
