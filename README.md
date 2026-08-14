@@ -171,7 +171,7 @@ Nếu bắt đầu tự án mới cần cài đặt Extension **MKE_ONE_MICROBIT
 #include <Wire.h>
 #include <MKE_I2C_MotorDriver.h>
 
-MKE_M17_MotorDriver motorDriver;
+MKE_I2C_MotorDriver motorDriver;
 
 void setup() {
   Serial.begin(9600);
@@ -289,8 +289,8 @@ Ví dụ sử dụng hai Module MKE-M17:
 #include <Wire.h>
 #include <MKE_I2C_MotorDriver.h>
 
-MKE_M17_MotorDriver frontWheels;
-MKE_M17_MotorDriver rearWheels;
+MKE_I2C_MotorDriver frontWheels;
+MKE_I2C_MotorDriver rearWheels;
 
 void setup() {
 
