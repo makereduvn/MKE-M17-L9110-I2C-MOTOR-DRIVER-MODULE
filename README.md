@@ -85,45 +85,46 @@ Cổng này được thiết kế để kết nối với **[MKE-M15-BLUETOOTH-U
 | `MB1` | Motor B   |
 | `MB2` | Motor B   |
 
-## Jumper J1
-Jumper J1 dùng để lựa chọn nguồn Module MKE-M17.
-**J1 = OFF — Mặc định**
-Nguồn cấp cho Module MKE-M17 hoạt động độc lập với nguồn cấp cho động cơ, khi đó chân 5V trên cổng I2C/BLE sẽ là chân nguồn Input 5VDC.
-**#J1 = ON**
-Nguồn cấp cho Module MKE-M17 hoạt động sử dụng nguồn cấp cho động cơ, khi đó chân 5V trên cổng I2C/BLE sẽ là chân nguồn Output 5VDC / Max 700mA.
+## Sơ đồ kết nối
 
-## Nút nhấn chức năng SW1
+| MCU | MKE-M17     | Chức năng          |
+| ----------- | ----------- | ------------------ |
+| `5V`        | `5V`       | Nguồn dương 5VDC   |
+| `GND`       | `GND`       | Nguồn âm 0VDC      |
+| `SDA`        | `SDA`       | I2C Data           |
+| `SCL`        | `SCL`       | I2C Clock          |
+
+| Ngoại vi | MKE-M17     | Chức năng          |
+| ----------- | ----------- | ------------------ |
+| DC Motor 1  | `MA1 / MA2` | Motor A            |
+| DC Motor 2  | `MB1 / MB2` | Motor B            |
+| Battery `+` | `6-9V`      | Nguồn motor 6–9VDC |
+| Battery `-` | `GND`       | Nguồn âm 0VDC   |
+
+### Jumper J1
+Jumper J1 dùng để lựa chọn nguồn Module MKE-M17.
+
+**J1 = OFF — Mặc định**
+Nguồn cấp cho Module MKE-M17 **hoạt động độc lập với nguồn cấp cho động cơ**, khi đó chân 5V trên cổng I2C/BLE sẽ là chân nguồn **Input 5VDC**, sử dụng trong trường hợp muốn tách biệt phần cấp nguồn giữa Mạch điều kiển động cơ và bo mạch chủ MCU.
+
+**#J1 = ON**
+Nguồn cấp cho Module MKE-M17 **hoạt động sử dụng chung nguồn cấp cho động cơ**, khi đó chân 5V trên cổng I2C/BLE sẽ là chân nguồn **Output 5VDC / Max 700mA**, sử dụng trong trường hợp muốn tận dụng nguồn cấp cho mạch điều khiển động cơ để cấp nguồn cho bo mạch chủ MCU hoặc **[MKE-M15-BLUETOOTH-UART-MODULE ](https://github.com/makereduvn/MKE-M15-BLUETOOTH-UART-MODULE)**.
+
+### Nút nhấn chức năng SW1
 MKE-M17 tích hợp một nút nhấn đa chức năng.
 
-### Kiểm tra motor
+**Kiểm tra motor**
 Nhấn nút **1 lần** để chạy chương trình tự kiểm tra:
 1. Motor A quay thuận.
 2. Motor A quay ngược.
 3. Motor B quay thuận.
 4. Motor B quay ngược.
 
-### Khôi phục cài đặt gốc
+**Khôi phục cài đặt gốc**
 Nhấn và giữ nút khoảng **4 giây**.
 Module sẽ:
 * Xóa cấu hình trong EEPROM.
 * Khôi phục địa chỉ I2C về mặc định `0x40`.
-
-## Sơ đồ kết nối với Arduino Uno
-
-Khi sử dụng Arduino Uno, đặt **J1 = OFF**.
-
-| Arduino Uno | MKE-M17     | Chức năng          |
-| ----------- | ----------- | ------------------ |
-| `5V`        | `VCC`       | Nguồn logic        |
-| `GND`       | `GND`       | Mass               |
-| `A4`        | `SDA`       | I2C Data           |
-| `A5`        | `SCL`       | I2C Clock          |
-| Battery `+` | `Vin`       | Nguồn motor 6–9VDC |
-| Battery `-` | `GND`       | Mass nguồn motor   |
-| DC Motor 1  | `MA1 / MA2` | Motor A            |
-| DC Motor 2  | `MB1 / MB2` | Motor B            |
-
-Sơ đồ kết nối này được mô tả trong tài liệu MakerEdu cho cấu hình Arduino Uno + MKE-M17/MKE-M18.
 
 ## Hướng dẫn cài đặt thư viện Arduino
 
