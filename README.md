@@ -126,116 +126,26 @@ Module sẽ:
 * Xóa cấu hình trong EEPROM.
 * Khôi phục địa chỉ I2C về mặc định `0x40`.
 
-## Hướng dẫn cài đặt thư viện Arduino
+## Hướng dẫn cài đặt bộ thư viện
 
-Có hai phương pháp cài đặt thư viện điều khiển MKE-M17.
+### Sử dụng với Arduino Uno / Vietduino Uno / ESP32
+- Trong **Tools / Library Manager**, tìm và cài đặt bộ thư viện tổng hợp **"MKE_ONE" by MakerEdu.vn**
+- Mở chương trình mẫu tại **File / Examples / MKE_ONE / Module / MKE_M17_I2C_L9110**
+- Cấu hình board mạch tương ứng là **Arduino Uno / ESP32**, chọn đúng cổng **COM Port** của mạch và nhấn **Upload** để nạp chương trình.
+- Cấp nguồn 5VDC cho mạch, kết nối chân SDA và SCL của Sensor với chân điều khiển được khai báo trong chương trình.
+- Xem kết quả mạch hoạt động theo chương trình đã nạp.
 
-### Phương pháp 1: Sử dụng thư viện MKE_ONE — Khuyến nghị
+### Sử dụng với Micro:bit (kéo thả khối)
 
-1. Mở **Arduino IDE**.
-2. Chọn:
+- Khởi động [Microsoft MakeCode](https://makecode.microbit.org/) và **Import** chương trình theo đường link sau: `https://github.com/makereduvn/mke_m17_i2c_l9110_microbit/`
+- Kết nối mạch Micro:bit và **Download** chương trình.
+- Cấp nguồn 5VDC cho mạch, kết nối chân SDA và SCL của Sensor với chân điều khiển được khai báo trong chương trình.
+- Xem kết quả mạch hoạt động theo chương trình đã nạp.
 
-```text
-Tools → Manage Libraries...
-```
+Nếu bắt đầu tự án mới cần cài đặt Extension **MKE_ONE_MICROBIT** trên [Microsoft MakeCode](https://makecode.microbit.org/) theo [hướng dẫn tại đây](https://github.com/makereduvn/MKE_ONE_MICROBIT). Sau khi cài đặt thành công, các khối lệnh của Extension **MKE_ONE_MICROBIT** sẽ xuất hiện trong danh sách block và sẵn sàng để sử dụng.
 
-3. Tìm:
 
-```text
-MKE_ONE
-```
-
-4. Nhấn **Install**.
-5. Khi Arduino IDE yêu cầu cài đặt các thư viện phụ thuộc, chọn **Install All**.
-6. Arduino IDE sẽ tự động cài đặt thư viện:
-
-```text
-MakerEdu_I2C_MotorDriver
-```
-
-Sau khi cài đặt, chương trình mẫu MKE-M17 có thể được mở tại:
-
-```text
-File
-→ Examples
-→ MKE_ONE
-→ Module
-→ MKE_M17_I2C_Motor_L9110
-```
-
-### Phương pháp 2: Cài đặt trực tiếp Driver Library
-
-Trong Arduino IDE:
-
-```text
-Tools
-→ Manage Libraries...
-```
-
-Tìm:
-
-```text
-MakerEdu I2C Motor Driver
-```
-
-Sau đó chọn **Install**.
-
-## Lập trình Arduino
-
-### Khởi tạo thư viện
-
-```cpp
-#include <Wire.h>
-#include <MKE_I2C_MotorDriver.h>
-
-MKE_M17_MotorDriver motorDriver;
-
-void setup() {
-  Serial.begin(9600);
-
-  // Khởi tạo I2C Master
-  Wire.begin();
-
-  // Khởi tạo MKE-M17 tại địa chỉ mặc định 0x40
-  motorDriver.begin();
-}
-
-void loop() {
-  // Motor A quay thuận với tốc độ 200/255
-  motorDriver.motorA_CW(200);
-
-  delay(1000);
-
-  // Dừng tất cả motor
-  motorDriver.stopAll();
-
-  delay(1000);
-}
-```
-
-> **Quan trọng:** `MKE_I2C_MotorDriver` không tự gọi `Wire.begin()` bên trong thư viện. Luôn gọi `Wire.begin()` trong `setup()` trước khi gọi `motorDriver.begin()`.
-
-## C++ API
-
-### Khởi tạo module
-
-```cpp
-motorDriver.begin();
-```
-
-Hoặc chỉ định địa chỉ I2C:
-
-```cpp
-motorDriver.begin(0x40);
-```
-
-Có thể chỉ định bus I2C khác:
-
-```cpp
-motorDriver.begin(0x40, Wire);
-```
-
-### Bảng API
+## Bộ thư viện MKE_I2C_MotorDriver
 
 | Hàm                              | Tham số                       | Mô tả                              |
 | -------------------------------- | ----------------------------- | ---------------------------------- |
@@ -258,53 +168,47 @@ motorDriver.begin(0x40, Wire);
 | `setPwmMB1(val)`                 | `0–255`                       | Điều khiển PWM trực tiếp MB1       |
 | `setPwmMB2(val)`                 | `0–255`                       | Điều khiển PWM trực tiếp MB2       |
 
-Tài liệu định nghĩa tốc độ motor theo thang **0–255**; tham số `duration_ms = 0` cho phép motor chạy liên tục, còn giá trị lớn hơn 0 sẽ tự động dừng sau thời gian tương ứng.
+> **Quan trọng:** `MKE_I2C_MotorDriver` không tự gọi `Wire.begin()` bên trong thư viện. Luôn gọi `Wire.begin()` trong `setup()` trước khi gọi `motorDriver.begin()`.
 
-## Ví dụ 1: Điều khiển tốc độ và chiều quay
+### Ví dụ 1: Điều khiển động cơ chạy, đảo chiều quay và dừng
 
 ```cpp
 #include <Wire.h>
 #include <MKE_I2C_MotorDriver.h>
 
-MKE_I2C_MotorDriver motorDriver;
+MKE_M17_MotorDriver motorDriver;
 
 void setup() {
   Serial.begin(9600);
 
+  // Khởi tạo I2C Master
   Wire.begin();
+
+  // Khởi tạo MKE-M17 tại địa chỉ mặc định 0x40
   motorDriver.begin();
 }
 
 void loop() {
-
-  // Tăng dần tốc độ Motor A theo chiều thuận
-  for (int speed = 0; speed <= 255; speed += 25) {
-    motorDriver.motorA_CW(speed);
-    delay(100);
-  }
+  // Motor A quay thuận với tốc độ 200
+  motorDriver.motorA_CW(200);
 
   delay(1000);
 
-  // Dừng Motor A
-  motorDriver.stopMotorA();
-
-  delay(500);
-
-  // Đảo chiều Motor A
+  // Motor A quay nghịch với tốc độ 200
   motorDriver.motorA_CCW(200);
 
-  delay(1500);
+  delay(1000);
 
   // Dừng tất cả motor
   motorDriver.stopAll();
 
-  delay(2000);
+  delay(1000);
 }
 ```
 
-## Ví dụ 2: Chạy motor theo thời gian định trước
+### Ví dụ 2: Chạy motor theo thời gian định sẵn
 
-MKE-M17 hỗ trợ lệnh điều khiển motor có thời gian chạy, giúp Master có thể gửi lệnh chạy motor mà không cần duy trì việc điều khiển PWM liên tục.
+MKE-M17 hỗ trợ lệnh điều khiển motor chạy theo thời gian định sẵn, giúp Master có thể gửi lệnh chạy motor mà không cần duy trì việc điều khiển PWM liên tục. Ngoài ra còn tích hợp cơ chế **PID Watchdog Safety**, trong đó Master có thể gửi lệnh định kỳ, nếu quá thời gian timeout mà không nhận được lệnh tiếp theo, motor sẽ được dừng an toàn.
 
 ```cpp
 #include <Wire.h>
@@ -335,9 +239,7 @@ void loop() {
 }
 ```
 
-Tài liệu MakerEdu cũng mô tả cơ chế **PID Watchdog Safety**, trong đó Master có thể gửi lệnh định kỳ; nếu quá thời gian timeout mà không nhận được lệnh tiếp theo, motor sẽ được dừng an toàn.
-
-## Ví dụ 3: Đọc điện áp pin
+### Ví dụ 3: Đọc điện áp pin
 
 MKE-M17 cho phép đọc điện áp nguồn motor thông qua hàm `getVin()` với đơn vị **mV**.
 
@@ -382,7 +284,7 @@ void loop() {
 }
 ```
 
-## Sử dụng nhiều MKE-M17 trên cùng bus I2C
+### Sử dụng nhiều MKE-M17 trên cùng bus I2C
 
 Mỗi MKE-M17 có thể được cấu hình một địa chỉ I2C khác nhau, cho phép nhiều driver hoạt động trên cùng một bus.
 
@@ -399,10 +301,10 @@ void setup() {
 
   Wire.begin();
 
-  // Module phía trước
+  // Module phía trước, sử dụng địa chỉ mặc định 0x40
   frontWheels.begin(0x40);
 
-  // Module phía sau
+  // Module phía sau, cần đổi sang địa chỉ 0x41 bằng hàm đổi địa chỉ trước đó để không trùng lặp
   rearWheels.begin(0x41);
 
   // Điều khiển 4 động cơ chạy tiến
@@ -417,9 +319,9 @@ void loop() {
 }
 ```
 
-Cách cấu hình này cho phép xây dựng hệ thống **4WD sử dụng 2 module MKE-M17**, trong đó mỗi module điều khiển hai động cơ.
+Cách cấu hình này cho phép xây dựng hệ thống **4WD sử dụng 2 module MKE-M17**, trong đó mỗi module điều khiển 2 động cơ, tổng điều khiển 4 động cơ độc lập.
 
-## Ví dụ 4: Robot Mecanum 4 bánh
+### Ví dụ 4: Robot Mecanum 4 bánh
 
 Hai module MKE-M17 có thể được sử dụng để điều khiển robot Mecanum 4 bánh.
 
@@ -485,43 +387,6 @@ void loop() {
   delay(2000);
 }
 ```
-
-Đây là cấu hình được tài liệu MakerEdu sử dụng cho robot Mecanum 4WD với hai driver, mỗi driver điều khiển hai bánh.
-
-## Lập trình với BBC micro:bit
-
-MKE-M17 hỗ trợ **BBC micro:bit** thông qua lập trình block trên **Microsoft MakeCode**.
-
-### Cài đặt Extension
-
-1. Truy cập:
-
-```text
-https://makecode.microbit.org
-```
-
-2. Tạo **New Project**.
-3. Chọn:
-
-```text
-Settings → Extensions
-```
-
-4. Nhập URL Extension:
-
-```text
-https://github.com/Khuuxuanngoc/makeCode_MKE_I2C_Motor_Driver_extension_test
-```
-
-5. Nhấn **Enter** để thêm Extension.
-
-Extension hỗ trợ các bài học về:
-
-* Điều khiển motor DC cơ bản.
-* Chạy motor theo thời gian.
-* Đọc điện áp pin và cảnh báo điện áp thấp.
-* Lập trình robot 2WD.
-* Lập trình robot Mecanum 4WD sử dụng 2 driver.
 
 ## Giao tiếp I2C cấp thấp
 
