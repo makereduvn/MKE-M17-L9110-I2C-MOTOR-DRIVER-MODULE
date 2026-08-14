@@ -462,9 +462,8 @@ MCU tích hợp trên MKE-M17 sẽ tự động **ngắt tín hiệu PWM và d�
 ![MKE-M17 I2C_L9110](/extras/MKE-M17_1.jpg)
 
 ## Hình ảnh sản phẩm
-![MKE-M17 I2C_L9110](/extras/MKE-M17_2.jpg)
-![MKE-M17 I2C_L9110](/extras/MKE-M17_3.jpg)
-![MKE-M17 I2C_L9110](/extras/MKE-M17_4.jpg)
+![MKE-M17 I2C_L9110](/extras/MKE-M17_2.png)
+![MKE-M17 I2C_L9110](/extras/MKE-M17_3.png)
 
 ## Miễn trừ trách nhiệm
 Sản phẩm này là bo mạch phát triển được thiết kế phục vụ cho mục đích nghiên cứu, thử nghiệm và học tập, không phải là một thiết bị hoàn chỉnh. Trong trường hợp người dùng kết hợp mạch này với các linh kiện, thiết bị hoặc phần mềm khác để tạo thành một hệ thống hoặc sản phẩm hoàn chỉnh, mọi chức năng và tính phù hợp của sản phẩm sau cùng đều thuộc trách nhiệm của người dùng.
