@@ -39,8 +39,7 @@ Module sử dụng **2 IC L9110** làm mạch cầu H, hỗ trợ điều khiể
 | **Địa chỉ I2C mặc định**         | `0x40`                                   |
 | **Khoảng địa chỉ I2C**           | `1 – 126`                                |
 | **Cổng BLE**                     | Dùng kết nối Module Bluetooth điều khiển qua [APP Dabble](https://thestempedia.com/product/dabble/)  |
-| **Module Bluetooth tương thích** | [MKE-M15-BLUETOOTH-UART-MODULE ](https://github.com/makereduvn/MKE-M15-BLUETOOTH-UART-MODULE)           |
-| **Điện trở kéo lên I2C**         | 10kΩ trên SDA và SCL                     |
+| **Module Bluetooth tương thích** | [MKE-M15-BLUETOOTH-UART-MODULE ](https://github.com/makereduvn/MKE-M15-BLUETOOTH-UART-MODULE)        |
 | **Bảo vệ nguồn motor**           | Diode chống ngược cực SS34               |
 | **Ngõ ra Motor A**               | MA1, MA2                                 |
 | **Ngõ ra Motor B**               | MB1, MB2                                 |
@@ -56,8 +55,6 @@ Module sử dụng **2 IC L9110** làm mạch cầu H, hỗ trợ điều khiể
 | `5V` | Nguồn dương 5VDC                    |
 | `SDA` | I2C Data                           |
 | `SCL` | I2C Clock                          |
-
-Chân `SDA` và `SCL` được tích hợp điện trở kéo lên **10kΩ**.
 
 ### Cổng BLE
 | Chân  | Chức năng |
