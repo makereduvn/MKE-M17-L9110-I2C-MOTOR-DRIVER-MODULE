@@ -2,8 +2,6 @@
 
 ## Giới thiệu
 
-## Giới thiệu
-
 **Mạch điều khiển động cơ DC MKE-M17 L9110 I2C Motor Driver Module** là module điều khiển **2 động cơ DC công suất thấp 0.8A/kênh** như **TT Motor, N20 Motor** thông qua giao tiếp **I2C**. Module tích hợp **vi điều khiển 32-bit ARM Cortex-M0+** đảm nhiệm việc tạo PWM, điều khiển chiều quay, quản lý thời gian và giám sát điện áp nguồn motor, giúp vi điều khiển chính như **Arduino, ESP32, ESP8266, Raspberry Pi hoặc STM32** dễ dàng điều khiển động cơ chỉ thông qua hai tín hiệu **SDA và SCL**. 
 
 Module sử dụng **2 x IC L9110** làm mạch cầu H, hỗ trợ điều khiển độc lập hai động cơ với các chức năng:
