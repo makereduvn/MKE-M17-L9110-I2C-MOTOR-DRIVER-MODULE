@@ -107,7 +107,7 @@ Jumper J1 dùng để lựa chọn nguồn Module MKE-M17.
 **J1 = OFF — Mặc định**
 Nguồn cấp cho Module MKE-M17 **hoạt động độc lập với nguồn cấp cho động cơ**, khi đó chân 5V trên cổng I2C/BLE sẽ là chân nguồn **Input 5VDC**, sử dụng trong trường hợp muốn tách biệt phần cấp nguồn giữa Mạch điều kiển động cơ và bo mạch chủ MCU.
 
-**#J1 = ON**
+**J1 = ON**
 Nguồn cấp cho Module MKE-M17 **hoạt động sử dụng chung nguồn cấp cho động cơ**, khi đó chân 5V trên cổng I2C/BLE sẽ là chân nguồn **Output 5VDC / Max 700mA**, sử dụng trong trường hợp muốn tận dụng nguồn cấp cho mạch điều khiển động cơ để cấp nguồn cho bo mạch chủ MCU hoặc **[MKE-M15-BLUETOOTH-UART-MODULE ](https://github.com/makereduvn/MKE-M15-BLUETOOTH-UART-MODULE)**.
 
 ### Nút nhấn chức năng SW1
@@ -284,11 +284,11 @@ void loop() {
 }
 ```
 
-### Sử dụng nhiều MKE-M17 trên cùng bus I2C
+### Ví dụ 4: Sử dụng nhiều Module MKE-M17 trên cùng bus I2C
 
-Mỗi MKE-M17 có thể được cấu hình một địa chỉ I2C khác nhau, cho phép nhiều driver hoạt động trên cùng một bus.
+Mỗi Module MKE-M17 có thể được cấu hình một địa chỉ I2C khác nhau, cho phép nhiều driver hoạt động trên cùng một bus.
 
-Ví dụ sử dụng hai MKE-M17:
+Ví dụ sử dụng hai Module MKE-M17:
 
 ```cpp
 #include <Wire.h>
@@ -321,9 +321,9 @@ void loop() {
 
 Cách cấu hình này cho phép xây dựng hệ thống **4WD sử dụng 2 module MKE-M17**, trong đó mỗi module điều khiển 2 động cơ, tổng điều khiển 4 động cơ độc lập.
 
-### Ví dụ 4: Robot Mecanum 4 bánh
+### Ví dụ 5: Điều khiển Robot 4 bánh Mecanum
 
-Hai module MKE-M17 có thể được sử dụng để điều khiển robot Mecanum 4 bánh.
+Hai Module MKE-M17 có thể được sử dụng để điều khiển Robot 4 bánh Mecanum.
 
 ```cpp
 #include <Wire.h>
@@ -388,48 +388,23 @@ void loop() {
 }
 ```
 
-## Giao tiếp I2C cấp thấp
+## Giao thức Truyền nhận I2C Chuẩn (Raw Protocol)
 
-MKE-M17 có thể được điều khiển trực tiếp từ các nền tảng không sử dụng Arduino, chẳng hạn:
+Dành cho lập trình viên sử dụng trên các nền tảng khác như ESP-IDF (C), Raspberry Pi (Python smbus2), STM32 HAL:
 
-* ESP-IDF.
-* Raspberry Pi Python.
-* STM32 HAL.
+### Định dạng Gói Ghi (Master → Slave)
+- Độ dài cố định: 6 bytes
+- Cấu trúc: [Region (0x05)] [ModeID (1 byte)] [Payload MSB] [Payload Byte 2] [Payload Byte 1] [Payload LSB]
+- Thứ tự byte: Big-Endian (Byte trọng số cao truyền trước).
+- Quy tắc Payload:
+  - Lệnh cơ bản: payload = speed (0–255).
+  - Lệnh có hẹn giờ: payload = ((uint32_t)duration_ms << 16) | (uint32_t)speed.
 
-### Gói dữ liệu Write
-
-Mỗi gói lệnh có độ dài **6 byte**:
-
-```text
-[Region] [ModeID] [Payload MSB] [Payload Byte 2] [Payload Byte 1] [Payload LSB]
-```
-
-Trong đó:
-
-```text
-Region = 0x05
-```
-
-Dữ liệu sử dụng **Big-Endian**, byte có trọng số lớn nhất được truyền trước.
-
-Đối với lệnh thông thường:
-
-```text
-payload = speed
-```
-
-Đối với lệnh chạy theo thời gian:
-
-```text
-payload = ((uint32_t)duration_ms << 16) | speed
-```
-
-### Trình tự đọc dữ liệu
-
-1. Gửi gói Write 6 byte với ModeID cần đọc và `payload = 0`.
-2. Chờ ít nhất **200µs**.
-3. Thực hiện I2C Read với độ dài **4 byte**.
-4. Ghép 4 byte nhận được thành số nguyên 32-bit theo Big-Endian.
+### Trình tự Đọc Dữ liệu (Master ⇄ Slave)
+- Gửi gói Write 6 byte với ModeID cần đọc (payload = 0).
+- Tạo độ trễ tối thiểu 200 μs (delayMicroseconds(200)) để Slave MCU chuẩn bị dữ liệu.
+- Gửi lệnh I2C Read đọc 4 bytes (requestFrom(address, 4)).
+- Ghép 4 bytes nhận được thành số nguyên 32-bit Big-Endian.
 
 ### Bảng lệnh I2C
 
@@ -448,24 +423,20 @@ payload = ((uint32_t)duration_ms << 16) | speed
 |    `2` | `Get_ID_Module`  | Read  | `3`                            | Đọc Device ID           |
 |    `4` | `Get_FW_Version` | Read  | `uint32_t`                     | Đọc phiên bản firmware  |
 
-Các ModeID và cấu trúc payload trên được lấy từ bảng **User Command Map** trong tài liệu kỹ thuật MKE-M17/MKE-M18.
-
 ## Điều khiển Bluetooth với MKE-M15 và Dabble
 
-MKE-M17 có thể kết hợp với **MKE-M15 Bluetooth UART Module** để điều khiển robot thông qua ứng dụng **Dabble** trên smartphone.
+Module MKE-M17 có thể kết nối trực tiếp với **[MKE-M15-BLUETOOTH-UART-MODULE ](https://github.com/makereduvn/MKE-M15-BLUETOOTH-UART-MODULE)** để điều khiển độc lập qua [APP Dabble](https://thestempedia.com/product/dabble/) mà không cần MCU.
 
-### Kết nối phần cứng
+### Sơ đồ kết nối
 
-Cắm MKE-M15 vào cổng BLE/UART:
+| MKE-M17 | MKE-M15     | Chức năng          |
+| ----------- | ----------- | ------------------ |
+| `GND`       | `GND`       | Nguồn âm 0VDC      |
+| `5V`        | `5V`       | Nguồn dương 5VDC    |
+| `RX`        | `TX`       | Chân giao tiếp UART |
+| `TX`        | `RX`       | Chân giao tiếp UART |
 
-```text
-VCC
-GND
-TX
-RX
-```
-
-Sau đó kết nối smartphone với MKE-M15 thông qua Bluetooth và mở module **Gamepad** trong Dabble.
+> **Quan trọng:** Ở chế độ này Jummper J1 cần được thiết lập là **J1 = ON**, khi đó nguồn cấp cho Module MKE-M17 **hoạt động sử dụng chung nguồn cấp cho động cơ**, chân 5V trên cổng BLE sẽ là chân nguồn **Output 5VDC / Max 700mA** cấp nguồn cho bo mạch **[MKE-M15-BLUETOOTH-UART-MODULE ](https://github.com/makereduvn/MKE-M15-BLUETOOTH-UART-MODULE)**.
 
 ### Điều khiển bằng Dabble Gamepad
 
@@ -483,17 +454,20 @@ Sau đó kết nối smartphone với MKE-M15 thông qua Bluetooth và mở modu
 Joystick analog sử dụng trục X/Y trong khoảng `-7.0` đến `+7.0`.
 
 ### Failsafe khi mất Bluetooth
-
 Nếu:
-
 * Mất tín hiệu Bluetooth.
 * Module nằm ngoài phạm vi kết nối.
 * Ứng dụng Dabble bị đóng.
 
 MCU tích hợp trên MKE-M17 sẽ tự động **ngắt tín hiệu PWM và dừng toàn bộ motor**.
 
+## Kích thước sản phẩm
+![MKE-M17 I2C_L9110](/extras/MKE-M17_1.jpg)
+
+## Hình ảnh sản phẩm
+![MKE-M17 I2C_L9110](/extras/MKE-M17_2.jpg)
+![MKE-M17 I2C_L9110](/extras/MKE-M17_3.jpg)
+![MKE-M17 I2C_L9110](/extras/MKE-M17_4.jpg)
+
 ## Miễn trừ trách nhiệm
-
-Sản phẩm là **bo mạch điều khiển/phát triển** được thiết kế phục vụ mục đích nghiên cứu, thử nghiệm, giáo dục và phát triển robot, không phải là một thiết bị hoàn chỉnh.
-
-Trong trường hợp người dùng kết hợp MKE-M17 với các động cơ, pin, linh kiện, thiết bị hoặc phần mềm khác để tạo thành một hệ thống hoặc sản phẩm hoàn chỉnh, mọi chức năng, độ an toàn và tính phù hợp của hệ thống sau cùng thuộc trách nhiệm của người dùng.
+Sản phẩm này là bo mạch phát triển được thiết kế phục vụ cho mục đích nghiên cứu, thử nghiệm và học tập, không phải là một thiết bị hoàn chỉnh. Trong trường hợp người dùng kết hợp mạch này với các linh kiện, thiết bị hoặc phần mềm khác để tạo thành một hệ thống hoặc sản phẩm hoàn chỉnh, mọi chức năng và tính phù hợp của sản phẩm sau cùng đều thuộc trách nhiệm của người dùng.
